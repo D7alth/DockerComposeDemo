@@ -1,0 +1,15 @@
+@DockerComposeDemoApp_HostAddress = http://localhost:5041
+
+GET {{DockerComposeDemoApp_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+POST {{DockerComposeDemoApp_HostAddress}}/todos/
+Content-Type: application/json
+
+{
+  "title": "Buy groceries",
+  "isCompleted": false,
+  "description": "Remember to buy milk, eggs, and bread."
+}
