@@ -1,0 +1,7 @@
+﻿services:
+  dockercomposedemoapp:
+    image: dockercomposedemoapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+
