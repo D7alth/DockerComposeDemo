@@ -1,4 +1,5 @@
 using DockerComposeDemoApp.Data;
+using DockerComposeDemoApp.Extensions;
 using DockerComposeDemoApp.Models;
 using DockerComposeDemoApp.Services.Abstractions;
 using DockerComposeDemoApp.Services.Implementations;
@@ -7,18 +8,26 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddScoped(_ => new AppDbContext(
-    new DbContextOptionsBuilder<AppDbContext>()
-        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-        .Options
-));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 
 var app = builder.Build();
 
+if (app.Environment.IsProduction())
+{
+    try
+    {
+        await app.UseDatabaseMigrationAsync();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        throw;
+    }
+}
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
