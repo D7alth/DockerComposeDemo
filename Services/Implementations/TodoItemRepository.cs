@@ -15,8 +15,11 @@ public class TodoItemRepository(AppDbContext dbContext) : ITodoItemRepository
 
     public Task<TodoItem?> GetTodoItemAsync(Guid id) => dbContext.TodoItems.FindAsync(id).AsTask();
 
-    public Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync() =>
-        dbContext.TodoItems.ToListAsync().ContinueWith(t => t.Result.AsEnumerable());
+    public async Task<IList<TodoItem>> GetAllTodoItemsAsync()
+    {
+        var todoItems = await dbContext.TodoItems.ToListAsync();
+        return todoItems;
+    }
 
     public Task UpdateTodoItemAsync(TodoItem item)
     {
