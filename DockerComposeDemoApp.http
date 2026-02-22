@@ -1,11 +1,12 @@
 @DockerComposeDemoApp_HostAddress = http://localhost:5041
+@DockerComposeDemoApp_Docker_Enviroment_Host = http://192.168.0.65:8080
 
-GET {{DockerComposeDemoApp_HostAddress}}/todos/
+GET {{DockerComposeDemoApp_Docker_Enviroment_Host}}/todos/
 Accept: application/json
 
 ###
 
-POST {{DockerComposeDemoApp_HostAddress}}/todos/
+POST {{DockerComposeDemoApp_Docker_Enviroment_Host}}/todos/
 Content-Type: application/json
 
 {
