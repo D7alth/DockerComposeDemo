@@ -1,7 +1,42 @@
 ﻿services:
-  dockercomposedemoapp:
-    image: dockercomposedemoapp
+# Add postgres service to the compose file
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: todoDatabase
+    ports:
+      - "8888:5432"
+    networks:
+      network:
+        ipv4_address: "192.168.0.66"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d todoDatabase"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+# Build the app service using the Dockerfile in the current directory
+  app:
+    image: app
     build:
       context: .
       dockerfile: Dockerfile
-
+    ports:
+      - "8088:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=postgres;Database=todoDatabase;User Id=demo;Password=demo;
+    networks:
+      network:
+        ipv4_address: "192.168.0.65"
+# Define a custom network with a specific subnet
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.0.0/24" 
