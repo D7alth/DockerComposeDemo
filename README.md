@@ -1,7 +1,4 @@
 # Docker Compose Demo App 🐳
-
-A weekend project to explore Docker Compose with a .NET 10 API and PostgreSQL. Nothing fancy—just a simple Todo API to test container orchestration and service communication.
-
 ## Overview
 
 Minimal .NET API connected to PostgreSQL, all running in Docker containers. Built this to experiment with Docker Compose configuration and see how everything plays together.
@@ -21,10 +18,9 @@ Simple CRUD operations for a Todo model (Title, Description, IsCompleted).
 
 ```bash
 docker-compose up
-dotnet ef database update
 ```
 
-API runs on `http://localhost:8080`
+API runs on `http://192.168.0.65:8080` (DOCKER_HOST_IP) and connects to PostgreSQL at `postgres:5432` (service name in Docker Compose).
 
 ## Endpoints
 
